@@ -108,7 +108,7 @@ export default class PlaceBetButton extends ObserverComponent {
 
     async loadFonts() {
         bundleManager.loadAssetsFromBundle("resources", `fonts/yellow-number`, Font, null).then((font) => (this.activeMoneyFont = font));
-        bundleManager.loadAssetsFromBundle("resources", `fonts/gray-money`, Font, null).then((font) => (this.disableMoneyFont = font));
+        bundleManager.loadAssetsFromBundle("resources", `fonts/gray-number`, Font, null).then((font) => (this.disableMoneyFont = font));
         for (const fontName of MULTIPLIER_FONT_NAME) {
             const font = await bundleManager.loadAssetsFromBundle("resources", `fonts/${fontName}-number`, BitmapFont, null);
             this.fontMultipliers.push(font);
