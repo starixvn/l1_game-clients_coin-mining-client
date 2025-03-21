@@ -78,6 +78,7 @@ export default class PlaceBetButton extends ObserverComponent {
 
     private startAxePosition: Vec3 = null;
     private nodeGuideHit: Node = null;
+    private cashOutButtonInteractable: boolean = false;
 
     getLevelUpSpine() {
         if (!this._levelUpSpine) {
@@ -107,8 +108,18 @@ export default class PlaceBetButton extends ObserverComponent {
     }
 
     async loadFonts() {
-        bundleManager.loadAssetsFromBundle("resources", `fonts/yellow-number`, Font, null).then((font) => (this.activeMoneyFont = font));
-        bundleManager.loadAssetsFromBundle("resources", `fonts/gray-number`, Font, null).then((font) => (this.disableMoneyFont = font));
+        bundleManager.loadAssetsFromBundle("resources", `fonts/yellow-number`, Font, null).then((font) => {
+            try {
+                this.activeMoneyFont = font;
+                this.updateFontButtonCashOut();
+            } catch (e) {}
+        });
+        bundleManager.loadAssetsFromBundle("resources", `fonts/gray-number`, Font, null).then((font) => {
+            try {
+                this.disableMoneyFont = font;
+                this.updateFontButtonCashOut();
+            } catch (e) {}
+        });
         for (const fontName of MULTIPLIER_FONT_NAME) {
             const font = await bundleManager.loadAssetsFromBundle("resources", `fonts/${fontName}-number`, BitmapFont, null);
             this.fontMultipliers.push(font);
@@ -460,7 +471,9 @@ export default class PlaceBetButton extends ObserverComponent {
         const hitStoneButton = this.hitStoneButton.getComponent(Button);
         hitStoneButton.interactable = uiState !== BetUIState.Settle;
 
-        this.lblMoney.font = buttonCashOut.interactable ? this.activeMoneyFont : this.disableMoneyFont;
+        this.cashOutButtonInteractable = buttonCashOut.interactable;
+
+        this.updateFontButtonCashOut();
         const animation = this.lblMoney.getComponent(Animation);
         if (animation) {
             if (buttonCashOut.interactable) {
@@ -469,6 +482,13 @@ export default class PlaceBetButton extends ObserverComponent {
                 animation.stop();
                 this.lblMoney.node.scale = v3(1, 1, 1);
             }
+        }
+    }
+
+    private updateFontButtonCashOut() {
+        const font = this.cashOutButtonInteractable ? this.activeMoneyFont : this.disableMoneyFont;
+        if (font) {
+            this.lblMoney.font = font;
         }
     }
 }
