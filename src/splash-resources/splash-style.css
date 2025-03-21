@@ -61,5 +61,5 @@ body {
 }
 
 body #Background {
-    background: url("./background.jpg?v=2") repeat-x !important;
+    background: url("./background.jpg?v=2") !important;
 }
