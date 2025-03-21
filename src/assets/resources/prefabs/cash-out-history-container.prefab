@@ -109,24 +109,6 @@
     "cashOutHistoryPanel": {
       "__id__": 1
     },
-    "fontMultipliers": [
-      {
-        "__uuid__": "4857bf18-eed5-4dbb-a3a6-84bbf61f6354",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "08d8ea39-0578-4381-b57e-0de7387b7015",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "87655d57-54ca-47e8-b017-fdc6f61c3a3b",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "cdda14ac-f42c-4da7-a794-0d5e3d6c3705",
-        "__expectedType__": "cc.BitmapFont"
-      }
-    ],
     "bgMultipliers": [
       {
         "__uuid__": "2d67d332-0b65-4c26-aacf-03f54c9217cc@87473",

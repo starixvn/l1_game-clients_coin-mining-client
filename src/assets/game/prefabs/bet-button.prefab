@@ -1318,32 +1318,6 @@
     "tapArea": null,
     "effect": null,
     "spineAxe": null,
-    "fontMultipliers": [
-      {
-        "__uuid__": "4857bf18-eed5-4dbb-a3a6-84bbf61f6354",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "08d8ea39-0578-4381-b57e-0de7387b7015",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "87655d57-54ca-47e8-b017-fdc6f61c3a3b",
-        "__expectedType__": "cc.BitmapFont"
-      },
-      {
-        "__uuid__": "cdda14ac-f42c-4da7-a794-0d5e3d6c3705",
-        "__expectedType__": "cc.BitmapFont"
-      }
-    ],
-    "activeMoneyFont": {
-      "__uuid__": "08d8ea39-0578-4381-b57e-0de7387b7015",
-      "__expectedType__": "cc.BitmapFont"
-    },
-    "disableMoneyFont": {
-      "__uuid__": "fcc398c1-7534-437c-bae0-b5ecd61fa290",
-      "__expectedType__": "cc.BitmapFont"
-    },
     "levelUpSpine": null,
     "bgCashOutButton": {
       "__id__": 99

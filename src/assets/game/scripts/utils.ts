@@ -7,6 +7,8 @@ export const MULTIPLIER_THRESHOLDS = {
     LEVEL_1: 0,
 };
 
+export const MULTIPLIER_FONT_NAME = ["blue", "yellow", "red", "purple"];
+
 export const getCurrentAnimationLevel = (multiplier: number): number => {
     const { LEVEL_4, LEVEL_3, LEVEL_2 } = MULTIPLIER_THRESHOLDS;
     if (multiplier >= LEVEL_4) return 4;

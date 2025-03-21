@@ -2,26 +2,27 @@ import gc from "@sg/game-client-base";
 import {
     _decorator,
     Animation,
+    BitmapFont,
     Button,
     EventTouch,
     Font,
     Intersection2D,
     Label,
+    log,
     math,
     Node,
     PolygonCollider2D,
     sp,
+    Sprite,
     v3,
     Vec3,
-    SpriteFrame,
-    Sprite,
 } from "cc";
 import { bundleManager } from "db://shared-components/shared/common-components/bundle-manager/bundle-manager";
 import { ObserverComponent } from "db://shared-components/shared/common-components/observer-component/scripts/observer-component";
 import { AnimationUtils } from "db://shared-components/shared/utils";
 import Observer from "observer";
 import { AudioIds } from "../../../../audios/AudioIds";
-import { changeCursorPointer, changePointerWhenHover, getCurrentAnimationLevel, resetCursor } from "../../../utils";
+import { changeCursorPointer, changePointerWhenHover, getCurrentAnimationLevel, MULTIPLIER_FONT_NAME, resetCursor } from "../../../utils";
 import { BetHandler } from "../bet-handler";
 import { BetStore, BetUIState } from "../bet-store";
 
@@ -54,15 +55,6 @@ export default class PlaceBetButton extends ObserverComponent {
     @property(sp.Skeleton)
     private spineAxe: sp.Skeleton = null;
 
-    @property([Font])
-    private fontMultipliers: Font[] = [];
-
-    @property(Font)
-    private activeMoneyFont: Font = null;
-
-    @property(Font)
-    private disableMoneyFont: Font = null;
-
     @property(sp.Skeleton)
     private levelUpSpine: sp.Skeleton = null;
 
@@ -78,6 +70,9 @@ export default class PlaceBetButton extends ObserverComponent {
     private multiplier = 0;
     private axeLevel = 1;
     private currentAnimationName = "";
+    private fontMultipliers: Font[] = [];
+    private activeMoneyFont: Font = null;
+    private disableMoneyFont: Font = null;
 
     private readonly EFFECT_RESET_DELAY = 1;
 
@@ -90,6 +85,7 @@ export default class PlaceBetButton extends ObserverComponent {
     private nodeGuideHit: Node = null;
 
     onLoad() {
+        this.loadFonts();
         this.levelUpSpine.node.active = false;
         this.levelUpAxeSpine = this.levelUpSpine.node.getChildByName("axe").getComponent(sp.Skeleton);
         this.levelUpAxeSpine.node.active = false;
@@ -101,6 +97,15 @@ export default class PlaceBetButton extends ObserverComponent {
         this.initializeAnimations();
         super.onLoad();
         this.addEvent();
+    }
+
+    async loadFonts() {
+        bundleManager.loadAssetsFromBundle("resources", `fonts/yellow-number`, Font, null).then((font) => (this.activeMoneyFont = font));
+        bundleManager.loadAssetsFromBundle("resources", `fonts/gray-money`, Font, null).then((font) => (this.disableMoneyFont = font));
+        for (const fontName of MULTIPLIER_FONT_NAME) {
+            const font = await bundleManager.loadAssetsFromBundle("resources", `fonts/${fontName}-number`, BitmapFont, null);
+            this.fontMultipliers.push(font);
+        }
     }
 
     onDestroy(): void {
@@ -234,7 +239,12 @@ export default class PlaceBetButton extends ObserverComponent {
     }
 
     updateMultiplierColor(level: number) {
-        this.lblMultiplier.font = this.fontMultipliers[level - 1];
+        const index = level - 1;
+        if (index < this.fontMultipliers.length) {
+            this.lblMultiplier.font = this.fontMultipliers[index];
+        } else {
+            log("not exist font multiplier with index ", index);
+        }
     }
 
     async updateTapAnim(level: number) {

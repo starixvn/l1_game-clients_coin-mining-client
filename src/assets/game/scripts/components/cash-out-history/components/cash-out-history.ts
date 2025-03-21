@@ -1,10 +1,11 @@
 import gc from "@sg/game-client-base";
 
-import { _decorator, Font, instantiate, Label, Node, Prefab, Sprite, SpriteFrame } from "cc";
+import { _decorator, BitmapFont, Font, instantiate, Label, Node, Prefab, Sprite, SpriteFrame } from "cc";
 import { ObserverComponent } from "db://shared-components/shared/common-components/observer-component/scripts/observer-component";
 import Observer from "observer";
 
-import { changePointerWhenHover, getCurrentAnimationLevel } from "../../../utils";
+import { bundleManager } from "db://shared-components/shared/common-components/bundle-manager/bundle-manager";
+import { changePointerWhenHover, getCurrentAnimationLevel, MULTIPLIER_FONT_NAME } from "../../../utils";
 import { HashHandlers } from "../../hash/hash-handlers";
 import { CashOutHistoryStore } from "../cash-out-history-store";
 const { FormatUtils, GameCrash } = gc;
@@ -20,13 +21,23 @@ export default class CashOutHistory extends ObserverComponent {
     @property(Node)
     cashOutHistoryPanel: Node = null;
 
-    @property([Font])
-    private fontMultipliers: Font[] = [];
-
     @property([SpriteFrame])
     private bgMultipliers: SpriteFrame[] = [];
 
     private rounds: gc.RoundHistories.RoundHistory[];
+    private fontMultipliers: Font[] = [];
+
+    async onLoad() {
+        await this.loadFonts();
+        super.onLoad();
+    }
+
+    async loadFonts() {
+        for (const fontName of MULTIPLIER_FONT_NAME) {
+            const font = await bundleManager.loadAssetsFromBundle("resources", `fonts/${fontName}-number`, BitmapFont, null);
+            this.fontMultipliers.push(font);
+        }
+    }
 
     @render(gc.GameCrash.RoundHistory.CrashRoundHistoryStore, (store) => store, { fireImmediately: false })
     setRoundsInfo(rounds: gc.GameCrash.RoundHistory.CrashRoundHistoryStore) {
