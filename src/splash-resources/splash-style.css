@@ -57,7 +57,7 @@ body {
 }
 
 .bg_no_translate {
-    background-image: none !important;
+    background-image: url("./game_background.webp?v=13") !important;
 }
 
 body #Background {
