@@ -222,20 +222,24 @@ export default class PlaceBetButton extends ObserverComponent {
     async playAxeTransformation(level: number) {
         try {
             this.showLevelUpAxe(true);
-            AnimationUtils.setOpacityNode(this.getLevelUpSpine().node, 255);
-            AnimationUtils.setOpacityNode(this.getLevelUpAxeSpine().node, 255);
+            const levelUpSpine = this.getLevelUpSpine();
+            const levelUpAxeSpine = this.getLevelUpAxeSpine();
+            levelUpSpine && AnimationUtils.setOpacityNode(levelUpSpine.node, 255);
+            levelUpAxeSpine && AnimationUtils.setOpacityNode(levelUpAxeSpine.node, 255);
 
             this.updateTapAnim(level);
 
             const lightSpineInfo = this.getTransformSpineInfo(level);
             const skeletonData = await this.loadAxeSpine(lightSpineInfo.name);
-            this.getLevelUpAxeSpine().skeletonData = skeletonData;
-            this.getLevelUpAxeSpine().setAnimation(0, lightSpineInfo.animation, false);
-            AnimationUtils.playSpine(this.getLevelUpSpine(), "light", true);
+            if (levelUpAxeSpine) {
+                levelUpAxeSpine.skeletonData = skeletonData;
+                levelUpAxeSpine.setAnimation(0, lightSpineInfo.animation, false);
+            }
+            levelUpSpine && AnimationUtils.playSpine(levelUpSpine, "light", true);
             await AnimationUtils.delayTime(2.5);
             const fadeDuration = 0.5;
-            AnimationUtils.fadeOut(this.getLevelUpSpine().node, fadeDuration);
-            await AnimationUtils.fadeOut(this.getLevelUpAxeSpine().node, fadeDuration);
+            levelUpSpine && AnimationUtils.fadeOut(levelUpSpine.node, fadeDuration);
+            levelUpAxeSpine && (await AnimationUtils.fadeOut(levelUpAxeSpine.node, fadeDuration));
 
             this.showLevelUpAxe(false);
         } catch (e) {}
