@@ -13,7 +13,6 @@ import {
     Node,
     PolygonCollider2D,
     sp,
-    Sprite,
     v3,
     Vec3,
 } from "cc";
@@ -55,11 +54,8 @@ export default class PlaceBetButton extends ObserverComponent {
     @property(sp.Skeleton)
     private spineAxe: sp.Skeleton = null;
 
-    @property(sp.Skeleton)
-    private levelUpSpine: sp.Skeleton = null;
-
-    @property(Sprite)
-    private bgCashOutButton: Sprite = null;
+    @property(Node)
+    private levelUpNode: Node = null;
 
     @property(Node)
     debugNode: Node = null;
@@ -73,22 +69,33 @@ export default class PlaceBetButton extends ObserverComponent {
     private fontMultipliers: Font[] = [];
     private activeMoneyFont: Font = null;
     private disableMoneyFont: Font = null;
+    private _levelUpSpine: sp.Skeleton = null;
+    private _levelUpAxeSpine: sp.Skeleton = null;
 
     private readonly EFFECT_RESET_DELAY = 1;
-
-    //private hitToolTip: Node = null;
 
     private realColliderRock: PolygonCollider2D = null;
 
     private startAxePosition: Vec3 = null;
-    private levelUpAxeSpine: sp.Skeleton = null;
     private nodeGuideHit: Node = null;
+
+    getLevelUpSpine() {
+        if (!this._levelUpSpine) {
+            this._levelUpSpine = this.levelUpNode.getChildByName("lv-up").getComponent(sp.Skeleton);
+        }
+        return this._levelUpSpine;
+    }
+
+    getLevelUpAxeSpine() {
+        if (!this._levelUpAxeSpine) {
+            this._levelUpAxeSpine = this.getLevelUpSpine()?.node?.getChildByName("axe")?.getComponent(sp.Skeleton);
+        }
+        return this._levelUpAxeSpine;
+    }
 
     onLoad() {
         this.loadFonts();
-        this.levelUpSpine.node.active = false;
-        this.levelUpAxeSpine = this.levelUpSpine.node.getChildByName("axe").getComponent(sp.Skeleton);
-        this.levelUpAxeSpine.node.active = false;
+        this.levelUpNode.active = false;
 
         this.startAxePosition = v3(this.spineAxe.node.parent.position);
         this.realColliderRock = this.effect.getComponent(PolygonCollider2D);
@@ -206,28 +213,29 @@ export default class PlaceBetButton extends ObserverComponent {
     }
 
     showLevelUpAxe(show: boolean) {
-        this.levelUpSpine.node.active = show;
-        this.levelUpAxeSpine.node.active = show;
+        this.levelUpNode.active = show;
+        this.getLevelUpSpine()?.node && (this.getLevelUpSpine().node.active = show);
+        this.getLevelUpAxeSpine()?.node && (this.getLevelUpAxeSpine().node.active = show);
         this.spineAxe.node.active = !show;
     }
 
     async playAxeTransformation(level: number) {
         try {
             this.showLevelUpAxe(true);
-            AnimationUtils.setOpacityNode(this.levelUpSpine.node, 255);
-            AnimationUtils.setOpacityNode(this.levelUpAxeSpine.node, 255);
+            AnimationUtils.setOpacityNode(this.getLevelUpSpine().node, 255);
+            AnimationUtils.setOpacityNode(this.getLevelUpAxeSpine().node, 255);
 
             this.updateTapAnim(level);
 
             const lightSpineInfo = this.getTransformSpineInfo(level);
             const skeletonData = await this.loadAxeSpine(lightSpineInfo.name);
-            this.levelUpAxeSpine.skeletonData = skeletonData;
-            this.levelUpAxeSpine.setAnimation(0, lightSpineInfo.animation, false);
-            AnimationUtils.playSpine(this.levelUpSpine, "light", true);
+            this.getLevelUpAxeSpine().skeletonData = skeletonData;
+            this.getLevelUpAxeSpine().setAnimation(0, lightSpineInfo.animation, false);
+            AnimationUtils.playSpine(this.getLevelUpSpine(), "light", true);
             await AnimationUtils.delayTime(2.5);
             const fadeDuration = 0.5;
-            AnimationUtils.fadeOut(this.levelUpSpine.node, fadeDuration);
-            await AnimationUtils.fadeOut(this.levelUpAxeSpine.node, fadeDuration);
+            AnimationUtils.fadeOut(this.getLevelUpSpine().node, fadeDuration);
+            await AnimationUtils.fadeOut(this.getLevelUpAxeSpine().node, fadeDuration);
 
             this.showLevelUpAxe(false);
         } catch (e) {}
