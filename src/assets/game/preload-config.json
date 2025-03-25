@@ -10,7 +10,8 @@
                 "text_stake",
                 "txt_mining",
                 "txt_big_win",
-                "txt_total_win"
+                "txt_total_win",
+                "txt_crashed"
             ]
         }
     }
