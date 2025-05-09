@@ -5,10 +5,13 @@ import * as InstantWinFeature from "../scripts";
 import { sharedContainer } from "../../scripts/shared-container";
 import { NullRoundTimeHandlers } from "./handlers/null-round-time-handlers";
 
+const GAME_NAME = "CoinMining";
+
 export const settings = {
     id: 109,
-    name: "CoinMining",
-    namespaces: ["CoinMining"],
+    name: GAME_NAME,
+    observerNamespace: GAME_NAME,
+    namespaces: [GAME_NAME],
     durations: {
         wholeRound: 14,
         lockingBet: 3,
