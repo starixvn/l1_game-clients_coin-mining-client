@@ -1,7 +1,8 @@
 import { GameConfigs } from "@sg/game-client-base";
 import { LogStore } from "db://shared-components/game/scripts/stores/log-store";
 
-import { containerOptions, settings } from "../../../assets/game/scripts/game-settings";
+import { settings } from "../../../assets/game/scripts/game-settings";
+import { containerOptions } from "../../../assets/game/scripts/containerOptions";
 
 jest.mock("db://shared-components/shared/scripts/startup", () => ({
     getSharedContainer: jest.fn(() => ({ sharedContainer: true })),
@@ -11,14 +12,20 @@ describe("settings", () => {
     it("should have data as expected", () => {
         // Assert
         expect(settings).toStrictEqual({
-            id: 73,
-            name: "Spaceflight",
+            id: 109,
+            name: "CoinMining",
+            observerNamespace: "CoinMining",
+            namespaces: ["CoinMining"],
             durations: {
                 wholeRound: 14,
                 lockingBet: 3,
                 placingBet: 10,
                 generatingResult: 0,
                 startRound: 1,
+
+                bigWinNotice: 5,
+                normalWinNotice: 3,
+                loseNotice: 1,
             },
             numberOfRoundHistory: 11,
             validateBalanceWhenBet: true,

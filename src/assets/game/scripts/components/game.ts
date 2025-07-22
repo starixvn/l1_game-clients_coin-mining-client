@@ -7,7 +7,8 @@ import { BalanceEffectHandlers } from "db://shared-components/game/balance-effec
 import GameComponent from "db://shared-components/game/scripts/components/game-component";
 import { siteConfigs } from "../../../scripts/site-configs";
 import { AudioIds } from "../../audios/AudioIds";
-import { containerOptions, settings } from "../game-settings";
+import { settings } from "../game-settings";
+import { containerOptions } from "../containerOptions";
 import "./../../../resources/i18n";
 import { BetHandler } from "./bets/bet-handler";
 import { BetStore, SettleStatus } from "./bets/bet-store";
