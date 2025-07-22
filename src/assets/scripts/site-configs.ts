@@ -24,7 +24,6 @@ const defaultConfig: gc.Configs.SiteConfigs = {
         proxyPath: "coinmining",
         route: "coinmining",
     },
-    mainObserverNamespace: "CoinMining",
     tolgeeUrl: "",
 };
 
