@@ -31,31 +31,31 @@ const { handle, render } = Observer;
 @ccclass
 export default class PlaceBetButton extends ObserverComponent {
     @property(Node)
-    private cashOutButton: Node = null;
+    cashOutButton: Node = null;
 
     @property(Node)
-    private startBetButton: Node = null;
+    startBetButton: Node = null;
 
     @property(Node)
-    private hitStoneButton: Node = null;
+    hitStoneButton: Node = null;
 
     @property(Label)
-    private lblMultiplier: Label = null;
+    lblMultiplier: Label = null;
 
     @property(Label)
-    private lblMoney: Label = null;
+    lblMoney: Label = null;
 
     @property(Node)
-    private tapArea: Node = null;
+    tapArea: Node = null;
 
     @property(sp.Skeleton)
-    private effect: sp.Skeleton = null;
+    effect: sp.Skeleton = null;
 
     @property(sp.Skeleton)
-    private spineAxe: sp.Skeleton = null;
+    spineAxe: sp.Skeleton = null;
 
     @property(Node)
-    private levelUpNode: Node = null;
+    levelUpNode: Node = null;
 
     @property(Node)
     debugNode: Node = null;
@@ -66,7 +66,7 @@ export default class PlaceBetButton extends ObserverComponent {
     private multiplier = 0;
     private axeLevel = 1;
     private currentAnimationName = "";
-    private fontMultipliers: Font[] = [];
+    private readonly fontMultipliers: Font[] = [];
     private activeMoneyFont: Font = null;
     private disableMoneyFont: Font = null;
     private _levelUpSpine: sp.Skeleton = null;
@@ -78,7 +78,7 @@ export default class PlaceBetButton extends ObserverComponent {
 
     private startAxePosition: Vec3 = null;
     private nodeGuideHit: Node = null;
-    private cashOutButtonInteractable: boolean = false;
+    private cashOutButtonInteractable = false;
 
     getLevelUpSpine() {
         if (!this._levelUpSpine) {
@@ -100,7 +100,6 @@ export default class PlaceBetButton extends ObserverComponent {
 
         this.startAxePosition = v3(this.spineAxe.node.parent.position);
         this.realColliderRock = this.effect.getComponent(PolygonCollider2D);
-        //this.hitToolTip = this.hitStoneButton.getChildByName("tooltip");
         this.nodeGuideHit = this.hitStoneButton.getChildByName("hand");
         this.initializeAnimations();
         super.onLoad();
@@ -188,7 +187,7 @@ export default class PlaceBetButton extends ObserverComponent {
             const level = getCurrentAnimationLevel(multiplier);
             const upgradingAxe = this.axeLevel < level;
 
-            let timeStamp = Date.now();
+            const timeStamp = Date.now();
             if (upgradingAxe && !this.upgradingAxe) {
                 this.upgradingAxe = true;
                 this.upgradeTimeStamp = timeStamp;
@@ -276,7 +275,7 @@ export default class PlaceBetButton extends ObserverComponent {
             this.currentAnimationName = kickSpineInfo.animation;
             const skeletonData = await this.loadAxeSpine(kickSpineInfo.name);
             this.spineAxe.skeletonData = skeletonData;
-            await AnimationUtils.playSpineAtProgress(this.spineAxe, this.currentAnimationName, 0.9999);
+            AnimationUtils.playSpineAtProgress(this.spineAxe, this.currentAnimationName, 0.9999);
         } catch (e) {}
     }
 
@@ -447,7 +446,6 @@ export default class PlaceBetButton extends ObserverComponent {
     @render(BetStore, (store) => store.uiState)
     updateUIState(uiState: BetUIState) {
         this.startBetButton.active = uiState === BetUIState.Start;
-        // this.cashOutButton.active = uiState === BetUIState.Bet || uiState === BetUIState.Mining || uiState === BetUIState.Settle;
 
         this.hitStoneButton.active = uiState >= BetUIState.Started;
 

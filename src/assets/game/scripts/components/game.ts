@@ -7,8 +7,8 @@ import { BalanceEffectHandlers } from "db://shared-components/game/balance-effec
 import GameComponent from "db://shared-components/game/scripts/components/game-component";
 import { siteConfigs } from "../../../scripts/site-configs";
 import { AudioIds } from "../../audios/AudioIds";
-import { settings } from "../game-settings";
 import { containerOptions } from "../containerOptions";
+import { settings } from "../game-settings";
 import "./../../../resources/i18n";
 import { BetHandler } from "./bets/bet-handler";
 import { BetStore, SettleStatus } from "./bets/bet-store";
@@ -35,13 +35,14 @@ export default class Game extends GameComponent {
     lblMaxBet: Label = null;
 
     @property(Node)
-    private nodeWinNotice: Node = null;
+    nodeWinNotice: Node = null;
 
     @property(Node)
-    private crashedNotice: Node = null;
+    crashedNotice: Node = null;
 
     @property(Node)
-    private centerNode: Node = null;
+    centerNode: Node = null;
+
     override namespace = settings.name;
     protected override enableEventShowHideGame = false;
     override containerOptions = containerOptions;
@@ -111,7 +112,7 @@ export default class Game extends GameComponent {
     @handle(CashOutHistoryHandlers, (handler) => handler.addCashOutHistory())
     addCashOutHistory() {}
 
-    shake(node: Node, duration: number = 1, strength: number = 10) {
+    shake(node: Node, duration = 1, strength = 10) {
         const originalPosition = new Vec3(node.position);
         const shakes: Tween<any>[] = [];
         const steps = Math.floor(duration / 0.02);

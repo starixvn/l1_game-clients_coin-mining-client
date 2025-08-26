@@ -11,9 +11,16 @@ export const MULTIPLIER_FONT_NAME = ["blue", "yellow", "red", "purple"];
 
 export const getCurrentAnimationLevel = (multiplier: number): number => {
     const { LEVEL_4, LEVEL_3, LEVEL_2 } = MULTIPLIER_THRESHOLDS;
-    if (multiplier >= LEVEL_4) return 4;
-    if (multiplier >= LEVEL_3) return 3;
-    if (multiplier >= LEVEL_2) return 2;
+    if (multiplier >= LEVEL_4) {
+        return 4;
+    }
+    if (multiplier >= LEVEL_3) {
+        return 3;
+    }
+    if (multiplier >= LEVEL_2) {
+        return 2;
+    }
+
     return 1;
 };
 

@@ -13,16 +13,8 @@ export class Player {
     status?: PlayerWinMessage;
     mine?: PlayerMineMessage;
     chip?: PlayerChipMessage;
-    
-    constructor(config: {
-        id: string;
-        name: string;
-        red: number;
-        avatarId: number;
-        type: boolean;
-        rate?: number;
-        multiplier?: number;
-    }) {
+
+    constructor(config: { id: string; name: string; red: number; avatarId: number; type: boolean; rate?: number; multiplier?: number }) {
         Object.assign(this, config);
     }
 }
@@ -66,10 +58,6 @@ export class PlayerStore {
     }
 
     players: Player[] = [];
-    updatePlayerInfoIndex: number = -1;
-    isUserActive: boolean = true;
+    updatePlayerInfoIndex = -1;
+    isUserActive = true;
 }
-
-
-
-

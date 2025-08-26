@@ -4,7 +4,7 @@ import { ObserverComponent } from "db://shared-components/shared/common-componen
 import { AnimationUtils } from "db://shared-components/shared/utils";
 import Observer from "observer";
 const { ccclass, property } = _decorator;
-const { observer, render, handle } = Observer;
+const { render } = Observer;
 
 @ccclass("coin_mining")
 export class CoinMining extends ObserverComponent {
@@ -17,6 +17,8 @@ export class CoinMining extends ObserverComponent {
 
     @render(gc.Bet.BetStore, (store) => store.isProcessingBet)
     playCoinMiningAnim(isProcessingBet: boolean) {
-        if (isProcessingBet) this.playAnim("shake", false);
+        if (isProcessingBet) {
+            this.playAnim("shake", false);
+        }
     }
 }

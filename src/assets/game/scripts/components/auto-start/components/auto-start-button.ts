@@ -12,13 +12,13 @@ const { handle, render } = Observer;
 @ccclass
 export class AutoStartButton extends ObserverComponent {
     @property(Node)
-    private buttonAutoStart: Node = null;
+    buttonAutoStart: Node = null;
 
     @property(Node)
-    private iconAutoStartOn: Node = null;
+    iconAutoStartOn: Node = null;
 
     @property(Node)
-    private iconAutoStartOff: Node = null;
+    iconAutoStartOff: Node = null;
 
     onLoad() {
         super.onLoad();

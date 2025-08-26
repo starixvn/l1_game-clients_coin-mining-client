@@ -24,7 +24,7 @@ export class TopWinnersContainer extends ObserverComponent {
     @property
     padding = 5;
 
-    playerName: string = "";
+    playerName = "";
 
     items: Node[] = [];
 

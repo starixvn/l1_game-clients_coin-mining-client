@@ -1,12 +1,10 @@
-import { Label, Node, Prefab, _decorator, instantiate } from "cc";
+import { Label, Node, _decorator } from "cc";
 import { ObserverComponent } from "db://shared-components/shared/common-components/observer-component/scripts/observer-component";
 
 import gc from "@sg/game-client-base";
-import Observer from "observer";
-import { BaseResultBodyItem } from "db://shared-components/game/bet-history/scripts/components/bet-history-body-item";
 import { LabelCopyComponent } from "db://shared-components/shared/common-components/copy-label/scripts/label-copy-component";
-import { ClientSeedInfo } from "db://shared-components/shared/common-components/provably-fair/client-seed-info";
 import { FunctionUtils } from "db://shared-components/shared/utils";
+import Observer from "observer";
 import { HashStore, ProvablyFair } from "../hash-store";
 const { ccclass, property } = _decorator;
 const { render, handle } = Observer;
@@ -62,7 +60,7 @@ export class ProvablyFairPopup extends ObserverComponent {
             return;
         }
 
-        const { serverSeed, serverSeedHash, finalHash, clientSeed  , finalResult, roundId } = verification;
+        const { serverSeed, serverSeedHash, finalHash, clientSeed, finalResult, roundId } = verification;
         this.lblRoundId.string = roundId.toString();
         this.lblCrashPoint.string = `${FormatUtils.numberWithCommas(finalResult, 2, false)}x`;
         this.lblClientSeed.string = clientSeed.toString();

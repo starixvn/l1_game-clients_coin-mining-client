@@ -1,27 +1,24 @@
-import gc from "@sg/game-client-base";
-import { _decorator, Component, Node } from 'cc';
-const { ccclass, property } = _decorator;
-import { CashOutHistoryStore } from './cash-out-history-store';
-import { BetStore } from '../bets/bet-store';
-import inversify from 'inversify';
+import inversify from "inversify";
+import { BetStore } from "../bets/bet-store";
+import { CashOutHistoryStore } from "./cash-out-history-store";
 const { injectable, inject } = inversify;
 
 @injectable()
 export class CashOutHistoryHandlers {
-    @inject(CashOutHistoryStore) protected readonly cashOutHistoryStore: CashOutHistoryStore;   
+    @inject(CashOutHistoryStore) protected readonly cashOutHistoryStore: CashOutHistoryStore;
     @inject(BetStore) protected readonly betStore: BetStore;
 
-    private maxCashOutHistory = 10;
+    private readonly maxCashOutHistory = 10;
 
     updateCashOutHistory(cashOutHistory: number[]) {
         this.cashOutHistoryStore.cashOutHistory = cashOutHistory;
     }
 
     addCashOutHistory() {
-        let cashOutHistory = [...this.cashOutHistoryStore.cashOutHistory];
+        const cashOutHistory = [...this.cashOutHistoryStore.cashOutHistory];
         cashOutHistory.push({
             multiplier: this.betStore.multiplier,
-            roundId: this.betStore.roundId
+            roundId: this.betStore.roundId,
         });
         if (cashOutHistory.length > this.maxCashOutHistory) {
             cashOutHistory.shift();
@@ -29,11 +26,7 @@ export class CashOutHistoryHandlers {
         this.updateCashOutHistory(cashOutHistory);
     }
 
-
-
     resetCashOutHistory() {
         this.cashOutHistoryStore.cashOutHistory = [];
     }
 }
-
-

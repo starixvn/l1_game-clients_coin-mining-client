@@ -1,4 +1,3 @@
-import gc from "@sg/game-client-base";
 import inversify from "inversify";
 import mobx from "mobx";
 const { injectable, inject } = inversify;
@@ -10,5 +9,3 @@ export class CashOutHistoryStore {
     }
     cashOutHistory: any[] = [];
 }
-
-

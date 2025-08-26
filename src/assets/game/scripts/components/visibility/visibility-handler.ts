@@ -1,4 +1,3 @@
-import gc from "@sg/game-client-base";
 import inversify from "inversify";
 import { VisibilityStore } from "./visibility-store";
 

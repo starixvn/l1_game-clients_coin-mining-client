@@ -1,5 +1,5 @@
 import gc from "@sg/game-client-base";
-import { _decorator, sp } from "cc";
+import { _decorator, Node, sp } from "cc";
 import { BalanceEffectHandlers } from "db://shared-components/game/balance-effect/scripts/handlers/balance-effect-handlers";
 import { TBalanceEffect, TWinningEffect } from "db://shared-components/game/balance-effect/scripts/stores/balance-effect-store";
 import { bundleManager } from "db://shared-components/shared/common-components/bundle-manager/bundle-manager";
@@ -87,7 +87,6 @@ export class AroundTablePlayers extends ObserverComponent {
             });
 
             emptySlot.node.getChildByName("axe").active = false;
-            return;
         }
     }
 
@@ -131,7 +130,7 @@ export class AroundTablePlayers extends ObserverComponent {
 
     @render(PlayerStore, (store) => ({ players: store.players, updatePlayerInfoIndex: store.updatePlayerInfoIndex }))
     renderAroundTablePlayerWhenStartBet(data: { players: Player[]; updatePlayerInfoIndex: number }) {
-        if (data.updatePlayerInfoIndex != -1) {
+        if (data.updatePlayerInfoIndex !== -1) {
             this.figureOutAroundTablePlayers(data.players, data.updatePlayerInfoIndex);
         }
     }
@@ -208,36 +207,24 @@ export class AroundTablePlayers extends ObserverComponent {
             AroundTablePlayerUtils.storePlayerToCache(aroundTablePlayer);
 
             const index = players.findIndex((p) => p.id === aroundTablePlayer.id);
-            if (index === updatePlayerInfoIndex) {
-                aroundTablePlayer.red = players[index].red;
-                AroundTablePlayerUtils.updatePlayerSlotDataStorage(
-                    {
-                        red: aroundTablePlayer.red,
-                    } as gc.GameServiceMessage.PlayerChip,
-                    player
-                );
-
-                if (players[index].status?.win && this.isTabVisible) {
-                    const nodeBalance = player.node.getChildByName("balance");
-                    const nodeWinning = player.node.getChildByName("winning");
-
-                    winningEffects.push({ effectNode: nodeWinning, status: true });
-                    balanceEffects.push({ effectNode: nodeBalance, balance: players[index].status.bet });
-                    this.aroundTablePlayersShowWinningEffect(winningEffects);
-                    this.updateAroundTablePlayersIncreaseBalance(balanceEffects);
-                }
-
-                this.updatePlayerInfo(index);
-
-                const axeNode = player.node.getChildByName("axe");
-                if (players[index].multiplier > 1.0) {
-                    axeNode.active = true;
-                    const spineAxe = axeNode.getChildByName("axe-skeleton").getComponent(sp.Skeleton);
-                    await this.updateMultiplier(players[index].multiplier, spineAxe);
-                } else {
-                    axeNode.active = false;
-                }
+            if (index !== updatePlayerInfoIndex) {
+                continue;
             }
+
+            aroundTablePlayer.red = players[index].red;
+            AroundTablePlayerUtils.updatePlayerSlotDataStorage(
+                {
+                    red: aroundTablePlayer.red,
+                } as gc.GameServiceMessage.PlayerChip,
+                player
+            );
+
+            this.handleWinAndBalanceEffects(player, players[index].status, winningEffects, balanceEffects);
+
+            this.updatePlayerInfo(index);
+
+            const axeNode = player.node.getChildByName("axe");
+            await this.updateAxeNodeByMultiplier(axeNode, players[index].multiplier);
         }
 
         const botAroundTablePlayerPlayerComps = AroundTablePlayerUtils.getBotAroundTablePlayerComps(this.aroundTablePlayerComponents);
@@ -262,6 +249,31 @@ export class AroundTablePlayers extends ObserverComponent {
     @handle(BalanceEffectHandlers.AroundTablePlayersIncreaseBalance)
     updateAroundTablePlayersIncreaseBalance(balanceEffects: TBalanceEffect[]) {
         return balanceEffects;
+    }
+
+    protected handleWinAndBalanceEffects(
+        playerComp: AroundTablePlayerComponent,
+        status: Player["status"] | undefined,
+        winningEffects: TWinningEffect[],
+        balanceEffects: TBalanceEffect[]
+    ) {
+        if (status?.win && this.isTabVisible) {
+            const nodeBalance = playerComp.node.getChildByName("balance");
+            const nodeWinning = playerComp.node.getChildByName("winning");
+            winningEffects.push({ effectNode: nodeWinning, status: true });
+            balanceEffects.push({ effectNode: nodeBalance, balance: status.bet });
+            this.aroundTablePlayersShowWinningEffect(winningEffects);
+            this.updateAroundTablePlayersIncreaseBalance(balanceEffects);
+        }
+    }
+
+    protected async updateAxeNodeByMultiplier(axeNode: Node, multiplier: number) {
+        const shouldShowAxe = multiplier > 1.0;
+        axeNode.active = shouldShowAxe;
+        if (shouldShowAxe) {
+            const spineAxe = axeNode.getChildByName("axe-skeleton").getComponent(sp.Skeleton);
+            await this.updateMultiplier(multiplier, spineAxe);
+        }
     }
 
     protected async handleIdleAroundTablePlayer(

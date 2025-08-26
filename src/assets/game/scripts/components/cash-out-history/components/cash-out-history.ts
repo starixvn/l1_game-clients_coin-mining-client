@@ -8,7 +8,7 @@ import { bundleManager } from "db://shared-components/shared/common-components/b
 import { changePointerWhenHover, getCurrentAnimationLevel, MULTIPLIER_FONT_NAME } from "../../../utils";
 import { HashHandlers } from "../../hash/hash-handlers";
 import { CashOutHistoryStore } from "../cash-out-history-store";
-const { FormatUtils, GameCrash } = gc;
+const { FormatUtils } = gc;
 
 const { ccclass, property } = _decorator;
 const { handle, render } = Observer;
@@ -22,10 +22,10 @@ export default class CashOutHistory extends ObserverComponent {
     cashOutHistoryPanel: Node = null;
 
     @property([SpriteFrame])
-    private bgMultipliers: SpriteFrame[] = [];
+    bgMultipliers: SpriteFrame[] = [];
 
     private rounds: gc.RoundHistories.RoundHistory[];
-    private fontMultipliers: Font[] = [];
+    private readonly fontMultipliers: Font[] = [];
 
     async onLoad() {
         await this.loadFonts();

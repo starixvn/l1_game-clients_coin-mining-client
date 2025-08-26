@@ -1,11 +1,10 @@
 import gc from "@sg/game-client-base";
-import { _decorator, Label, Node, Size, tween, UITransform, Vec3 } from "cc";
-import MainPlayerProfile from "../../../../../extensions/shared-components/assets/game/main-player-profile/scripts/components/main-player-profile";
+import { _decorator, Label, Node, Size, UITransform } from "cc";
 import Observer from "observer";
-import { BalanceInfoHandler } from "./balance-info-handler";
+import MainPlayerProfile from "../../../../../extensions/shared-components/assets/game/main-player-profile/scripts/components/main-player-profile";
 const { ccclass, property } = _decorator;
-const { observer, render, handle } = Observer;
-const { Player, Bet, FormatUtils, Settlements } = gc;
+const { render } = Observer;
+const { Player } = gc;
 const { MainPlayerStore } = Player;
 
 @ccclass
@@ -13,8 +12,8 @@ export class BalanceInfo extends MainPlayerProfile {
     @property(Node)
     balanceFrame: Node = null;
 
-    private minWidth: number = 180;
-    private maxWidth: number = 200;
+    private readonly minWidth = 180;
+    private readonly maxWidth = 200;
 
     onLoad() {
         super.onLoad();

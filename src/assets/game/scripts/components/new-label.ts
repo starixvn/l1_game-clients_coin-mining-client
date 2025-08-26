@@ -1,8 +1,7 @@
-import { _decorator, Component, Node, Label, UITransform } from 'cc';
-import { EDITOR } from 'cc/env';
+import { _decorator, Label, UITransform } from "cc";
 const { ccclass, property, executeInEditMode } = _decorator;
 
-@ccclass('NewLabel')
+@ccclass("NewLabel")
 @executeInEditMode
 export class NewLabel extends Label {
     @property
@@ -21,18 +20,18 @@ export class NewLabel extends Label {
         } else if (uiTransform.width < this.minWidth) {
             this.overflow = Label.Overflow.CLAMP;
             uiTransform.width = this.minWidth;
-        } else{
+        } else {
             this.overflow = Label.Overflow.NONE;
         }
     }
 
-    get string (): string {
+    get string(): string {
         return this._string;
     }
 
-    set string (value) {
+    set string(value) {
         if (value === null || value === undefined) {
-            value = '';
+            value = "";
         } else {
             value = value.toString();
         }
@@ -45,7 +44,4 @@ export class NewLabel extends Label {
         this.markForUpdateRenderData();
         this.updateWidth();
     }
-
 }
-
-
